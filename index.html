@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queer Fight Night @ Olive's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:      #0d0714;
+      --bg-dark:      #16092a;
+      --bg-mid:       #1e0e38;
+      --purple-dark:  #3b1369;
+      --purple-mid:   #6b28b8;
+      --purple-main:  #9b4dff;
+      --purple-bright:#c47eff;
+      --pink:         #f06bff;
+      --cyan:         #7af4ff;
+      --text-main:    #f0e6ff;
+      --text-dim:     #a884d4;
+
+      --mtg-bg-deep:  #061208;
+      --mtg-bg-mid:   #0d2414;
+      --mtg-green:    #a8ff3e;
+      --mtg-forest:   #1a4a1f;
+      --mtg-text-dim: #7aaa6a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Kanit', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      background: linear-gradient(180deg, rgba(13,7,20,0.97) 0%, rgba(13,7,20,0) 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+    }
+
+    .nav-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      line-height: 1.7;
+      color: var(--purple-bright);
+      text-shadow: 0 0 12px var(--purple-main);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--bg-deep);
+    }
+
+    .hero-crt {
+      position: absolute;
+      right: -10%;
+      top: 0;
+      bottom: 0;
+      width: 80%;
+      height: 100%;
+      object-fit: cover;
+      object-position: left;
+      animation: crt-flicker 0.3s infinite;
+    }
+    .mobile-crt {
+      animation: crt-flicker 0.3s infinite;
+    }
+
+    .mobile-crt::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(107,40,184,0.05) 0%, 
+        var(--bg-deep) 30%
+      );
+      pointer-events: none;
+    }
+
+    @keyframes crt-flicker {
+      0%, 97%, 100% { opacity: 1; }
+      98% { opacity: 0.6; }
+      99% { opacity: 0.78; }
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right,
+        var(--bg-deep) 0%,
+        var(--bg-deep) 28%,
+        rgba(22,9,42,0.7) 50%,
+        rgba(107,40,184,0.15) 75%,
+        rgba(107,40,184,0.05) 100%
+      );
+      pointer-events: none;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(155,77,255,0.03) 60px,
+        rgba(155,77,255,0.03) 61px
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 48px 80px;
+      max-width: 950px;
+    }
+
+    .mtg-inner {
+      position: relative;
+      z-index: 2;
+      padding: 60px 48px 60px;
+    }
+
+    .hero-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1.6rem, 5vw, 3.2rem);
+      line-height: 1.5;
+      color: var(--pink);
+      text-shadow:
+        0 0 10px rgba(240,107,255,0.8),
+        0 0 20px rgba(240,107,255,0.3),
+        3px 3px 0 var(--purple-dark);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s ease forwards;
+    }
+
+    .hero-title .rainbow {
+      text-shadow: 0 0 10px rgba(240,107,255,0.8), 0 0 20px rgba(240,107,255,0.3);
+      background: linear-gradient(90deg, #f00, #f90, #ff0, #0c0, #06f, #90f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+      color: white;
+      text-shadow: 0 0 15px var(--purple-main);
+      margin-bottom: 6px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.5s ease forwards;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.7s ease forwards;
+    }
+
+    .meta-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-pill.day  { border-color: white;                color: white; background: rgba(255,255,255,0.08); }
+    .meta-pill.time { border-color: var(--purple-bright);  color: white; background: rgba(239,121,255,0.08); }
+    .meta-pill.loc  { border-color: var(--pink);           color: white; background: rgba(240,107,255,0.08); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .about-text p strong { color: var(--text-main); font-weight: 700; }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      gap: 14px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.9s ease forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover::before { transform: translateX(0); }
+
+    .btn-primary {
+      background: var(--purple-mid);
+      color: #fff;
+      border: 2px solid var(--purple-bright);
+      box-shadow: 0 0 20px rgba(155,77,255,0.5), 0 0 40px rgba(155,77,255,0.2);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(155,77,255,0.8), 0 0 60px rgba(155,77,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: gray;
+      color: #fff;
+      border: 2px solid #fff;
+      box-shadow: 0 0 15px rgba(240,107,255,0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(240,107,255,0.1);
+      box-shadow: 0 0 25px rgba(240,107,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-icon { font-size: 1.1rem; }
+
+    section {
+      position: relative;
+      padding: 80px 32px;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      color: var(--purple-bright);
+      text-shadow: 0 0 20px rgba(196,126,255,0.5);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .about-poster {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid rgba(155,77,255,0.3);
+      box-shadow: 0 0 40px rgba(155,77,255,0.2), 0 0 80px rgba(155,77,255,0.1);
+      position: relative;
+    }
+
+    .about-poster img { width: 100%; display: block; }
+
+    .about-poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(155,77,255,0.1), transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .video-section { background: var(--bg-dark); }
+
+    .video-wrapper {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(155,77,255,0.3);
+      box-shadow:
+        0 0 0 1px rgba(155,77,255,0.1),
+        0 0 60px rgba(155,77,255,0.2),
+        0 0 120px rgba(155,77,255,0.1);
+      aspect-ratio: 16/9;
+      margin-top: 40px;
+    }
+
+    .video-wrapper iframe { width: 100%; height: 100%; display: block; }
+
+    .support-section { text-align: center; }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    footer {
+      padding: 40px 32px;
+      text-align: center;
+      border-top: 1px solid rgba(155,77,255,0.15);
+    }
+
+    footer img {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+
+    footer a { color: var(--purple-bright); text-decoration: none; }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(155,77,255,0.3), transparent);
+      margin: 0 32px;
+    }
+
+    .mtg-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(168,255,62,0.2), transparent);
+      margin: 0 32px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MTG SECTION ── */
+    .mtg-section {
+      background: linear-gradient(180deg,
+        var(--bg-deep) 0%,
+        var(--mtg-bg-deep) 12%,
+        var(--mtg-bg-mid) 50%,
+        var(--mtg-bg-deep) 88%,
+        var(--bg-deep) 100%
+      );
+      position: relative;
+      padding:00px 32px;
+      overflow: hidden;
+    }
+
+    .mtg-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(168,255,62,0.02) 60px,
+        rgba(168,255,62,0.02) 61px
+      );
+      pointer-events: none;
+    }
+
+    .mtg-inner {
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .mtg-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--mtg-green);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.8;
+    }
+
+    .mtg-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      max-width: 80px;
+    }
+
+    .mtg-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      line-height: 1.6;
+      color: var(--mtg-green);
+      text-shadow:
+        0 0 20px rgba(168,255,62,0.6),
+        0 0 50px rgba(168,255,62,0.2),
+        2px 2px 0 #061208;
+      margin-bottom: 24px;
+    }
+
+    .mtg-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .mtg-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      padding: 5px 13px;
+      border-radius: 100px;
+      border: 1px solid rgba(168,255,62,0.5);
+      color: var(--mtg-green);
+      background: rgba(168,255,62,0.07);
+      letter-spacing: 0.05em;
+    }
+
+    .mtg-text p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--mtg-text-dim);
+      margin-bottom: 14px;
+    }
+
+    .mtg-text p strong { color: #c8f08a; }
+
+    .mtg-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn-mtg-primary {
+      background: var(--mtg-forest);
+      color: var(--mtg-green);
+      border: 2px solid var(--mtg-green);
+      box-shadow: 0 0 20px rgba(168,255,62,0.3), 0 0 40px rgba(168,255,62,0.1);
+    }
+
+    .btn-mtg-primary:hover {
+      background: rgba(168,255,62,0.15);
+      box-shadow: 0 0 30px rgba(168,255,62,0.5), 0 0 60px rgba(168,255,62,0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-mtg-secondary {
+      background: transparent;
+      color: #c8f08a;
+      border: 2px solid rgba(168,255,62,0.4);
+    }
+
+    .btn-mtg-secondary:hover {
+      background: rgba(168,255,62,0.08);
+      border-color: var(--mtg-green);
+      box-shadow: 0 0 20px rgba(168,255,62,0.3);
+      transform: translateY(-2px);
+    }
+
+
+
+    .mtg-card-art {
+      border-radius: 16px;
+      
+      max-height: 500px;
+      overflow: hidden;
+      border: 2px solid rgba(168,255,62,0.25);
+      box-shadow:
+        0 0 40px rgba(168,255,62,0.15),
+        0 0 80px rgba(168,255,62,0.07),
+        inset 0 0 60px rgba(0,0,0,0.5);
+      background: var(--mtg-bg-mid);
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .mtg-card-art::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(168,255,62,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .mtg-card-art-inner {
+      font-size: 8rem;
+      filter: drop-shadow(0 0 30px rgba(168,255,62,0.4));
+      animation: float 4s ease-in-out infinite;
+    }
+    .mobile-crt { 
+      display: none;
+      background: linear-gradient(to bottom,
+          rgba(13,7,20,0.5) 0%,
+          rgba(13,7,20,0.85) 60%,
+          var(--bg-deep) 100%
+        );
+      }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    @media (min-width: 1500px) { 
+      .hero-content { margin-left: 10vw; } 
+      .mtg-inner { margin-left: 10vw; } 
+    }
+    @media (min-width: 2500px) { 
+      .hero-content { margin-left: 20vw; } 
+      .mtg-inner { margin-left: 20vw; } 
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+
+      .hero-content { padding: 50px 24px 20px; max-width: 100%; }
+      .mtg-inner { padding: 50px 24px 20px;  }
+      .hero { display: flex; flex-direction: column; }
+      .hero-crt { display: none !important; }
+      .mobile-crt { display: block !important;}
+      .hero::after {
+        background: linear-gradient(to bottom,
+          rgba(13,7,20,0.5) 0%,
+          rgba(13,7,20,0.85) 60%,
+          var(--bg-deep) 100%
+        );
+      }
+
+      .hero-cta, .mtg-cta {justify-content: center;}
+
+      .hero-title   { font-size: 2.5rem; }
+      .hero-subtitle { font-size: 0.85rem; }
+      .hero-content { 
+        padding: 20px 48px 80px; 
+      }
+      section { padding: 60px 20px; }
+      section.hero { padding: 0px 20px; }
+
+      .hero-meta, .mtg-meta  { justify-content: center; margin: 40px auto;}
+      .about-grid, .mtg-text { grid-template-columns: 1fr; text-align: center;}
+      .about-poster { order: -1; max-width: 340px; margin: 0 auto; }
+
+      .mtg-inner { grid-template-columns: 1fr; gap: 32px; }
+      .mtg-card-art { width: 90%; max-height:300px; margin: 20px auto 60px;  }
+
+      .hero-meta { width: 200px;}
+      .mtg-meta { width: 200px;}
+
+      .hero-title, .hero-subtitle, .mtg-title, .mtg-label{
+            justify-content: center;
+            display: grid;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title   { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 0.7rem; }
+      .btn { padding: 12px 20px; font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#">
+      <img src="logo.png" alt="QFN Logo" />
+      <span class="nav-title">QUEER FIGHT NIGHT @ OLIVE'S</span>
+    </a>
+  </nav>
+
+  <div class="mobile-crt" style="height:400px">
+    <img style="width:100%" class="mobile-crt-img" src="crt.png" alt="Queer Fight Night on CRT screen" />
+  </div>
+  <section class="hero">
+    <img class="hero-crt" src="crt.png" alt="Queer Fight Night on CRT screen" />
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="rainbow">QUEER</span>
+        FIGHT<br>NIGHT
+      </h1>
+      <p class="hero-subtitle">@ OLIVE'S</p>
+
+      <div class="hero-meta">
+        <span class="meta-pill day">📅 Every Tuesday</span>
+        <span class="meta-pill time">🕕 6 PM – 10 PM</span>
+        <span class="meta-pill loc">📍 Cap Hill, Seattle</span>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            <strong>Queer Fight Night</strong> is a weekly fighting game social, every Tuesday night in Capitol Hill, Seattle.
+          </p>
+          <p>
+            The event is free, and open to anyone regardless of identity — or skill level! Feel free to come just to socialize, this isn't a tournament, you don't have to be good.
+          </p>
+          <p>
+            We mostly play <strong>Rivals of Aether, Melee, Ultimate, and Guilty Gear,</strong> but we can set up any game upon request!
+          </p>
+          <p>
+            We cook food every week for all in attendance. Snacks, drinks, extra controllers, or extra setups are always appreciated. If you can't bring anything, but would still like to help out, we have a KoFi page where you can support what we do!
+          </p>
+        </div>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://discord.gg/WFVB8CvEnP" target="_blank">
+          <span class="btn-icon">💬</span> Join the Discord
+        </a>
+        <a class="btn btn-secondary" href="https://ko-fi.com/fightnight" target="_blank">
+          <span class="btn-icon">☕</span> Support on Ko-Fi
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="mtg-divider"></div>
+
+  <section class="mtg-section">
+    <div class="mtg-inner">
+      <div class="mtg-text">
+        <p class="mtg-label">Also @ Olive's</p>
+        <h2 class="mtg-title">QUEER GAME NIGHT</h2>
+        <div class="mtg-meta">
+          <span class="mtg-pill">🗓 Every Thursday</span>
+          <span class="mtg-pill">📍 Cap Hill, Seattle</span>
+          <span class="mtg-pill">🕕 6 PM – 12 PM</span>
+        </div>
+        <p>
+          <strong>Queer Game Night</strong> is a weekly MTG & board game night, every Thursday in Capitol Hill, Seattle.
+        </p>
+        <p>
+          We play a lot of <strong>Commander</strong>, and there's always a deck to borrow! We also play Cube Draft and other board games if people are feeling up for them!
+        </p>
+        <p>
+          Snacks, extra decks, and extra dice/playmats for newcomers are always appreciated!
+        </p>
+        <div class="mtg-cta">
+          <a class="btn btn-mtg-primary" href="https://discord.gg/WFVB8CvEnP" target="_blank">
+            <span class="btn-icon">💬</span> Join the Discord
+          </a>
+          <a class="btn btn-mtg-secondary" href="https://ko-fi.com/fightnight" target="_blank">
+            <span class="btn-icon">☕</span> Support on Ko-Fi
+          </a>
+        </div>
+      </div>
+      <div class="mtg-card-art" >
+          <img src="mtg.jpg" alt="Queer Fight Night event poster"  style="width: auto; height:100%"/>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="video-section" id="venue">
+    <div class="section-inner">
+      <div style="display: flex; flex-direction: row; gap: 40px;">
+        <div class="about-poster" style="width: 50%;">
+          <img src="poster2.png" alt="Queer Fight Night event poster" />
+        </div>
+        <div class="about-poster" style="width: 50%;">
+          <img src="poster.png" alt="Queer Fight Night event poster" />
+        </div>
+      </div>
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/0L_FD22SNcM?si=4CV0KL3iihwLm3xN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="support-section" id="join">
+    <div class="section-inner">
+      <h2 class="section-title" style="text-align:center;">COME FIGHT WITH US!</h2>
+      <p style="color: var(--text-dim); max-width: 480px; margin: 0 auto 8px; line-height: 1.7;">
+        Join the Discord to stay updated on events and announcements! Support the event on Ko-Fi to help us keep running!
+      </p>
+      <div class="support-grid">
+        <a class="btn btn-primary" style="justify-content: center" href="https://discord.gg/WFVB8CvEnP" target="_blank">
+          <span class="btn-icon">💬</span> Join the Discord
+        </a>
+        <a class="btn btn-secondary" style="justify-content: center" href="https://ko-fi.com/fightnight" target="_blank">
+          <span class="btn-icon">☕</span> Support on Ko-Fi
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <img src="logo.png" alt="QFN Logo" />
+    <p>
+      <strong style="color: var(--purple-bright);">Queer Fight Night @ Olive's</strong><br>
+      Every Tuesday · 6–10 PM · Capitol Hill, Seattle<br>
+      <a href="https://discord.gg/WFVB8CvEnP">https://discord.gg/WFVB8CvEnP</a>
+    </p>
+  </footer>
+
+</body>
+</html>
