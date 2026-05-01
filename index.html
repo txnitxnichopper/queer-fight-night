@@ -6,6 +6,20 @@
   <title>Queer Fight Night @ Olive's</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Open Graph (Discord, Facebook, etc) -->
+  <meta property="og:title" content="Queer Fight Night @ Olive's" />
+  <meta property="og:description" content="Weekly fighting game social, every Tuesday, 6–10 PM in Capitol Hill, Seattle" />
+  <meta property="og:image" content="https://queerfightnight.org/poster.png" />
+  <meta property="og:url" content="https://queerfightnight.org" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter/X card (also picked up by some other platforms) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Queer Fight Night @ Olive's" />
+  <meta name="twitter:description" content="Weekly fighting game social, every Tuesday, 6–10 PM in Capitol Hill, Seattle" />
+  <meta name="twitter:image" content="https://queerfightnight.org/poster.png" />
+
   <style>
     :root {
       --bg-deep:      #0d0714;
@@ -660,8 +674,32 @@
       .hero-subtitle { font-size: 0.7rem; }
       .btn { padding: 12px 20px; font-size: 0.7rem; }
     }
+    .mobile-fab {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-fab {
+        display: flex;
+        position: fixed;
+        bottom: max(50px, calc(env(safe-area-inset-bottom) + 10px));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 200;
+        white-space: nowrap;
+        transition: opacity 0.3s, visibility 0.3s;
+      }
+
+      .mobile-fab.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
   </style>
 </head>
+<a class="btn btn-primary mobile-fab" href="https://discord.gg/WFVB8CvEnP" target="_blank">
+  <span class="btn-icon">💬</span> Join the Discord
+</a>
 <body>
 
   <nav>
@@ -800,6 +838,19 @@
     </p>
   </footer>
   <script>
+    const fab = document.querySelector('.mobile-fab');
+    const heroCta = document.querySelector('.hero-cta');
+    if (fab && heroCta) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          fab.classList.add('hidden');
+        } else if (entry.boundingClientRect.top > 0) {
+          fab.classList.remove('hidden');
+        }
+      }, { threshold: 0.1 });
+      observer.observe(heroCta);
+    }
+
     const nav = document.querySelector('nav');
     let lastY = 0;
     let ticking = false;
